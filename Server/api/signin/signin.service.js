@@ -44,6 +44,7 @@ githubOAuth.on('error', function (err) {
 });
 
 githubOAuth.on('token', function (token, res) {
+  console.log(token);
   const myHeaders = new Headers();
 
   myHeaders.append('Authorization', `Bearer ${token.access_token}`);
@@ -60,8 +61,11 @@ githubOAuth.on('token', function (token, res) {
         } else {
           createUser(data);
         }
+        // res.status(200).json({ testToken: data });
       });
     });
-
-  res.redirect('/');
+  let testToken = 'testToken';
+  res.status(200).json({ testToken: testToken });
+  // console.log(res.body['testToken']);
+  // res.redirect('/');
 });
