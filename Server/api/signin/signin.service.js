@@ -47,6 +47,7 @@ githubOAuth.on('error', function (err) {
 });
 
 githubOAuth.on('token', function (token, res) {
+  console.log(token);
   const myHeaders = new Headers();
 
   myHeaders.append('Authorization', `Bearer ${token.access_token}`);
