@@ -4,6 +4,7 @@ const { Headers } = require('node-fetch');
 const githubOAuth = require('../../config/github.oauth');
 const query = require('../utils/signin.query');
 const { requestQuery } = require('../../config/database');
+const { user } = require('../../config/database.config');
 
 module.exports = {
   githubSignIn: (req, res) => {
@@ -39,6 +40,8 @@ const updateUserImage = async (data) => {
   const results = await requestQuery(query.UPDATE_USER_IMAGE, params);
 };
 
+// checkEmail;
+
 githubOAuth.on('error', function (err) {
   console.error('there was a login error', err);
 });
@@ -50,18 +53,18 @@ githubOAuth.on('token', function (token, res) {
   fetch('https://api.github.com/user', {
     headers: myHeaders,
   })
-    .then(function (res) {
+    .then((res) => {
       return res.json();
     })
-    .then(function (data) {
-      getUser(data).then(function (res) {
-        if (res === 1) {
+    .then((data) => {
+      getUser(data).then((result) => {
+        userInfo = data;
+        if (result === 1) {
           updateUserImage(data);
         } else {
           createUser(data);
         }
+        res.status(200).json({ token: data });
       });
     });
-
-  res.redirect('/');
 });
